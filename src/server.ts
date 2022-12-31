@@ -2,6 +2,7 @@ import express from 'express'
 import router from './router'
 import morgan from 'morgan'
 import cors from 'cors'
+import { authenticate } from './utils/auth'
 
 const app = express()
 
@@ -14,6 +15,6 @@ app.get('/', (req, res) => {
    res.status(200).json({ message: 'success' })
 })
 
-app.use('/api', router)
+app.use('/api', authenticate, router)
 
 export default app
