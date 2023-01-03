@@ -1,5 +1,5 @@
 import { User } from '@prisma/client'
-import { Request, Response, NextFunction } from 'express'
+import { RequestHandler } from 'express'
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
 
@@ -19,18 +19,20 @@ export const createJWT = (user: User) => {
    return token
 }
 
-export const authenticate = (
-   req: Request,
-   res: Response,
-   next: NextFunction
-) => {
+export const authenticate: RequestHandler = (req, res, next) => {
    const bearer = req.headers.authorization
 
-   if (!bearer) return res.status(401).json({ message: 'Not authorized' })
+   if (!bearer) {
+      res.status(401).json({ message: 'Not authorized' })
+      return
+   }
 
    const [, token] = bearer.split(' ')
 
-   if (!token) return res.status(401).json({ message: 'Not authorized' })
+   if (!token) {
+      res.status(401).json({ message: 'Not authorized' })
+      return
+   }
 
    try {
       const user = jwt.verify(token, process.env.JWT_SECRET!) as Pick<
@@ -42,6 +44,6 @@ export const authenticate = (
       next()
    } catch (e) {
       console.error(e)
-      return res.status(401).json({ message: 'Invalid token provided' })
+      res.status(401).json({ message: 'Invalid token provided' })
    }
 }
