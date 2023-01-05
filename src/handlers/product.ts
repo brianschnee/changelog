@@ -1,4 +1,4 @@
-import { RequestHandler, Request, Response, response } from 'express'
+import { RequestHandler } from 'express'
 import prisma from '../utils/db'
 
 // Get all
@@ -10,11 +10,11 @@ export const getProducts: RequestHandler = async (req, res) => {
 
    const user = await prisma.user.findUnique({
       where: {
-         id: req.user.id,
+         id: req.user.id
       },
       include: {
-         products: true,
-      },
+         products: true
+      }
    })
 
    res.json({ data: user?.products })
@@ -24,8 +24,8 @@ export const getProducts: RequestHandler = async (req, res) => {
 export const getOneProduct: RequestHandler = async (req, res) => {
    const product = await prisma.product.findUnique({
       where: {
-         id: req.params.id,
-      },
+         id: req.params.id
+      }
    })
 
    res.json({ data: product })
@@ -41,8 +41,8 @@ export const createProduct: RequestHandler = async (req, res) => {
    const product = await prisma.product.create({
       data: {
          name: req.body.name,
-         userId: req.user.id,
-      },
+         userId: req.user.id
+      }
    })
 
    res.json({ data: product })
@@ -59,12 +59,12 @@ export const updateProduct: RequestHandler = async (req, res) => {
       where: {
          id_userId: {
             id: req.params.id,
-            userId: req.user.id,
-         },
+            userId: req.user.id
+         }
       },
       data: {
-         name: req.body.name,
-      },
+         name: req.body.name
+      }
    })
 
    res.json({ data: updated })
@@ -81,9 +81,9 @@ export const deleteProduct: RequestHandler = async (req, res) => {
       where: {
          id_userId: {
             id: req.params.id,
-            userId: req.user.id,
-         },
-      },
+            userId: req.user.id
+         }
+      }
    })
 
    res.json({ data: deleted })
