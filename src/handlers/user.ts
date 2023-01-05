@@ -6,8 +6,8 @@ export const createNewUser = async (req: Request, res: Response) => {
    const user = await prisma.user.create({
       data: {
          username: req.body.username,
-         password: await hashPassword(req.body.password),
-      },
+         password: await hashPassword(req.body.password)
+      }
    })
 
    const token = createJWT(user)
@@ -17,8 +17,8 @@ export const createNewUser = async (req: Request, res: Response) => {
 export const signIn = async (req: Request, res: Response) => {
    const user = await prisma.user.findUnique({
       where: {
-         username: req.body.username,
-      },
+         username: req.body.username
+      }
    })
 
    if (!user) return res.status(401).json({ message: 'Invalid user' })
