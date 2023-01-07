@@ -77,14 +77,21 @@ export const deleteProduct: RequestHandler = async (req, res) => {
       return
    }
 
-   const deleted = await prisma.product.delete({
-      where: {
-         id_userId: {
-            id: req.params.id,
-            userId: req.user.id
+   try {
+      const deleted = await prisma.product.delete({
+         where: {
+            id_userId: {
+               id: req.params.id,
+               userId: req.user.id
+            }
          }
-      }
-   })
+      })
 
-   res.json({ data: deleted })
+      res.status(200).json({ data: deleted })
+   } catch (e) {
+      console.error(e)
+      res.status(400).json({
+         message: 'Product does not belong to user or id is invalid'
+      })
+   }
 }

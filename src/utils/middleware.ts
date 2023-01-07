@@ -7,14 +7,18 @@ export const productRules = () => {
 }
 
 export const updateRules = () => {
-   return [body('title').exists().isString(), body('body').exists().isString()]
+   return [
+      body('title').exists().isString(),
+      body('body').exists().isString(),
+      body('productId').exists().isString()
+   ]
 }
 
 export const updateUpdateRules = () => {
    return [
       body('title').optional(),
       body('body').optional(),
-      body('status').isIn(['IN_PROGRESS', 'SHIPPED', 'DEPRECATED']),
+      body('status').optional().isIn(['IN_PROGRESS', 'SHIPPED', 'DEPRECATED']),
       body('version').optional()
    ]
 }
